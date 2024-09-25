@@ -64,12 +64,15 @@ body {
 }
 
 .form-control {
-  width: 450px;
+  
   height: 74px !important;
   background-color: var(--background-color) !important;
   border: 2px solid var(--text-color) !important;
   border-radius: 74px 0 0 74px;
   color: var(--text-color);
+  width: 120%;
+  padding: 1rem;
+  font-size: 1rem; 
 }
 
 .form-control::placeholder {
@@ -94,6 +97,8 @@ body {
   color: var (--background-color);
   border-radius: 0 74px 74px 0;
   border: 2px solid var(--text-color);
+  padding: 1rem;
+  font-size: 1rem;  
 }
 
 .btn-submit-email:hover {
