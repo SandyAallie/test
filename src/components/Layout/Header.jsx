@@ -22,7 +22,7 @@ const Header = ({ onJoinClick }) => {
         >
         </button>
 
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+        <div>
           <ul className="navbar-nav m-auto">
             <img
               src={theme === 'dark' ? darkLogo : lightLogo}
