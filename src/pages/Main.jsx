@@ -66,25 +66,44 @@ const Main = () => {
                         </span>
                     </div>
 
-                    {/* Email Form */}
-                    <form ref={form} onSubmit={sendEmail} className="input-container d-flex mt-3">
-                        <div className="row">
-                            <div className="col-8">
-                                <input 
-                                    type="email" 
-                                    className="form-control p-3" 
-                                    placeholder="Your email address" 
-                                    name="user_email" 
-                                    required 
-                                />
-                            </div>
-                            <div className="col-4">
-                                <button type="submit" className='btn btn-submit-email w-100'>
-                                    Request Access
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                    
+                    
+
+
+{/* Email Form */}
+<form ref={form} onSubmit={sendEmail} className="input-container mt-3">
+  <div className="row g-2">  {/* Added g-2 for consistent gutter spacing */}
+    <div className="col-12 col-md-8">  {/* Full width on small screens, 8 columns on medium+ */}
+      <input 
+        type="email" 
+        className="form-control p-3" 
+        placeholder="Your email address" 
+        name="user_email" 
+        required 
+        style={{ width: '100%', padding: '1rem', fontSize: '1rem' }}  
+      />
+    </div>
+    <div className="col-12 col-md-4">  {/* Full width on small screens, 4 columns on medium+ */}
+      <button 
+        type="submit" 
+        className="btn btn-submit-email w-100" 
+        style={{ padding: '1rem', fontSize: '1rem' }}  
+      >
+        Request Access
+      </button>
+    </div>
+  </div>
+</form>
+
+
+
+
+
+
+
+
+
+
 
                     {/* Social Icons */}
                     <div className="social-icons mt-4 d-flex justify-content-center">
