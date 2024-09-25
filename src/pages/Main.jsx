@@ -26,14 +26,15 @@ const Main = () => {
     const { theme } = useContext(ThemeContext);
     const { lastSectionRef } = useOutletContext();
     const form = useRef();  
+    const heroFormRef = useRef();
 
-    const sendEmail = (e) => {
+    const sendEmail = (e, formRef) => {
         e.preventDefault();
 
         emailjs.sendForm(
             'service_6ulemwu',  
             'template_3r03w0y',  
-            form.current,
+            formRef.current,     // Use the correct form ref here
             'N_TQJHNO46Uf5fuGi'
         )
         .then(
@@ -67,7 +68,7 @@ const Main = () => {
                     </div>
 
                     {/* Email Form */}
-                    <form ref={form} onSubmit={sendEmail} className="input-container d-flex mt-3">
+                    <form ref={heroFormRef} onSubmit={(e) => sendEmail(e, heroFormRef)} className="input-container d-flex mt-3">
                         <div className="row">
                             <div className="col-8">
                                 <input 
@@ -85,6 +86,7 @@ const Main = () => {
                             </div>
                         </div>
                     </form>
+
 
                     {/* Social Icons */}
                     <div className="social-icons mt-4 d-flex justify-content-center">
@@ -215,24 +217,24 @@ const Main = () => {
                                 Join the waitlist now and get a step closer to your goals and make your financial decisions easily!
                             </span>
 
-                            <form ref={form} onSubmit={sendEmail} className="input-container d-flex mt-3">
-                                <div className="row">
-                                    <div className="col-8">
-                                        <input 
-                                            type="email" 
-                                            className="form-control p-3" 
-                                            placeholder="Your email address" 
-                                            name="user_email" 
-                                            required 
-                                        />
-                                    </div>
-                                    <div className="col-4">
-                                        <button type="submit" className='btn btn-submit-email w-100'>
-                                            Request Access
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
+                            <form ref={heroFormRef} onSubmit={(e) => sendEmail(e, heroFormRef)} className="input-container d-flex mt-3">
+                        <div className="row">
+                            <div className="col-8">
+                                <input 
+                                    type="email" 
+                                    className="form-control p-3" 
+                                    placeholder="Your email address" 
+                                    name="user_email" 
+                                    required 
+                                />
+                            </div>
+                            <div className="col-4">
+                                <button type="submit" className='btn btn-submit-email w-100'>
+                                    Request Access
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                         </div>
                     </div>
                 </div>

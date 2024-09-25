@@ -11,8 +11,7 @@ const Header = ({ onJoinClick }) => {
     <>
       <nav className="navbar navbar-expand-lg navbar-light mt-3 container">
         <ThemeToggle />
-
-        <div>
+        <div className=" navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav m-auto">
             <img
               src={theme === 'dark' ? darkLogo : lightLogo}
