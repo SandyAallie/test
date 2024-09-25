@@ -21,6 +21,7 @@ import emailjs from 'emailjs-com';
 import { ThemeContext } from '../contexts/ThemeContext.jsx';
 import { message } from 'antd';
 import { useOutletContext } from 'react-router-dom';
+import './Main.scss';
 
 const Main = () => {
     const { theme } = useContext(ThemeContext);
@@ -49,7 +50,8 @@ const Main = () => {
         <>
 
             <section>
-                <div className="container w-100 vh-100 d-flex flex-column justify-content-center align-items-center">
+            <div className="container images-responsive w-100 vh-100 d-flex flex-column justify-content-center align-items-center">
+                
                     <div className=" text-center">
                         <div className='mb-3'><img
                             src={theme === 'dark' ? darkH1 : lightH1}
@@ -75,7 +77,7 @@ const Main = () => {
                     </form>
 
 
-                    <div className="social-icons mt-4 d-flex justify-content-center">
+                    <div className="social-icons image-responsive mt-4 d-flex justify-content-center">
                         <a href="https://waitlist-aallie.onrender.com/" target="_blank" rel="noopener noreferrer">
                             <i className="fas fa-globe"></i>
                         </a>
@@ -126,7 +128,7 @@ const Main = () => {
             <section className='vh-50 mb-5'>
                 <div >
                     <img src={theme === 'dark' ? lineDarkLeft : lineLightLeft} className='img-line-1' alt="line" />
-                    <div className="container mt-5 d-flex flex-column justify-content-center align-items-center">
+                    <div className="container images-responsive mt-5 d-flex flex-column justify-content-center align-items-center">
 
                         <div className=" text-center">
                             <div className='mb-3'><img
