@@ -21,21 +21,19 @@ import emailjs from 'emailjs-com';
 import { ThemeContext } from '../contexts/ThemeContext.jsx';
 import { message } from 'antd';
 import { useOutletContext } from 'react-router-dom';
-import './Main.scss';
 
 const Main = () => {
     const { theme } = useContext(ThemeContext);
     const { lastSectionRef } = useOutletContext();
     const form = useRef();  
-    const heroFormRef = useRef();
 
-    const sendEmail = (e, formRef) => {
+    const sendEmail = (e) => {
         e.preventDefault();
 
         emailjs.sendForm(
             'service_6ulemwu',  
             'template_3r03w0y',  
-            formRef.current,     // Use the correct form ref here
+            form.current,
             'N_TQJHNO46Uf5fuGi'
         )
         .then(
@@ -52,19 +50,6 @@ const Main = () => {
         <>
             {/* Hero Section */}
             <section>
-<<<<<<< HEAD
-            <div className="container images-responsive w-100 vh-100 d-flex flex-column justify-content-center align-items-center">
-                
-                    <div className=" text-center">
-                        <div className='mb-3'><img
-                            src={theme === 'dark' ? darkH1 : lightH1}
-                            width="650"
-                            height="220"
-                            className="d-inline-block align-top"
-                            alt="proFormulate logo"
-                        /></div>
-                        <span className="tagline ">
-=======
                 <div className="container w-100 vh-100 d-flex flex-column justify-content-center align-items-center">
                     <div className="text-center">
                         <div className="mb-3">
@@ -77,13 +62,12 @@ const Main = () => {
                             />
                         </div>
                         <span className="tagline">
->>>>>>> 8ed5081104de8a2e60736fbc7c0c4428473d2fd6
                             Empowering entrepreneurs with personalized financial insights.
                         </span>
                     </div>
 
                     {/* Email Form */}
-                    <form ref={heroFormRef} onSubmit={(e) => sendEmail(e, heroFormRef)} className="input-container d-flex mt-3">
+                    <form ref={form} onSubmit={sendEmail} className="input-container d-flex mt-3">
                         <div className="row">
                             <div className="col-8">
                                 <input 
@@ -102,13 +86,8 @@ const Main = () => {
                         </div>
                     </form>
 
-
-<<<<<<< HEAD
-                    <div className="social-icons image-responsive mt-4 d-flex justify-content-center">
-=======
                     {/* Social Icons */}
                     <div className="social-icons mt-4 d-flex justify-content-center">
->>>>>>> 8ed5081104de8a2e60736fbc7c0c4428473d2fd6
                         <a href="https://waitlist-aallie.onrender.com/" target="_blank" rel="noopener noreferrer">
                             <i className="fas fa-globe"></i>
                         </a>
@@ -158,19 +137,6 @@ const Main = () => {
             <section className='vh-50 mb-5'>
                 <div>
                     <img src={theme === 'dark' ? lineDarkLeft : lineLightLeft} className='img-line-1' alt="line" />
-<<<<<<< HEAD
-                    <div className="container images-responsive mt-5 d-flex flex-column justify-content-center align-items-center">
-
-                        <div className=" text-center">
-                            <div className='mb-3'><img
-                                src={theme === 'dark' ? darkAI : lightAI}
-                                width="850"
-                                height="220"
-                                className="d-inline-block align-top"
-                                alt="proFormulate logo"
-                            /></div>
-                            <span className="subTagLine ">
-=======
                     <div className="container mt-5 d-flex flex-column justify-content-center align-items-center">
                         <div className="text-center">
                             <div className='mb-3'>
@@ -183,7 +149,6 @@ const Main = () => {
                                 />
                             </div>
                             <span className="subTagLine">
->>>>>>> 8ed5081104de8a2e60736fbc7c0c4428473d2fd6
                                 Improving business financial processes by utilizing AI.
                             </span>
                         </div>
@@ -241,37 +206,44 @@ const Main = () => {
                 </div>
             </section>
 
-            {/* Footer Section */}
-            <section ref={lastSectionRef} className='vh-50 mb-5'>
-                <div>
-                    <div className="container mt-5 d-flex flex-column justify-content-center align-items-center">
-                        <div className="text-center">
-                            <span className="FooterTagLine">
-                                Join the waitlist now and get a step closer to your goals and make your financial decisions easily!
-                            </span>
+        {/* Footer Section */}
+{/* Footer Section */}
+<section ref={lastSectionRef} className='vh-50 mb-5'>
+    <div>
+        <div className="container mt-5 d-flex flex-column justify-content-center align-items-center">
+            <div className="text-center">
+                <span className="FooterTagLine">
+                    Join the waitlist now and get a step closer to your goals and make your financial decisions easily!
+                </span>
 
-                            <form ref={heroFormRef} onSubmit={(e) => sendEmail(e, heroFormRef)} className="input-container d-flex mt-3">
-                        <div className="row">
-                            <div className="col-8">
-                                <input 
-                                    type="email" 
-                                    className="form-control p-3" 
-                                    placeholder="Your email address" 
-                                    name="user_email" 
-                                    required 
-                                />
-                            </div>
-                            <div className="col-4">
-                                <button type="submit" className='btn btn-submit-email w-100'>
-                                    Request Access
-                                </button>
-                            </div>
+                <form ref={form} onSubmit={sendEmail} className="input-container d-flex mt-3 w-100 justify-content-center">
+                    <div className="row w-100">
+                        <div className="col-8">
+                            <input 
+                                type="email" 
+                                className="form-control p-3" 
+                                placeholder="Your email address" 
+                                name="user_email" 
+                                required 
+                            />
                         </div>
-                    </form>
+                        <div className="col-4 d-flex justify-content-center align-items-center">
+                            <button 
+                                type="submit" 
+                                className='btn btn-submit-email' 
+                                style={{ padding: '0.5rem 1rem', fontSize: '0.875rem', height: '50px' }}>
+                                Request Access
+                            </button>
                         </div>
                     </div>
-                </div>
-            </section>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
         </>
     );
 };
