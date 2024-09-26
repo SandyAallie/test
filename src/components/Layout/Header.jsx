@@ -10,22 +10,28 @@ const Header = ({ onJoinClick }) => {
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light mt-3 container">
-        <ThemeToggle />
-        <div className=" navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav m-auto">
-            <img
-              src={theme === 'dark' ? darkLogo : lightLogo}
-              width="146"
-              height="56"
-              className="d-inline-block align-top"
-              alt="aallie logo"
-            />
-          </ul>
+        {/* Theme Toggle on the left */}
+        <div className="d-flex align-items-center">
+          <ThemeToggle />
         </div>
 
-        <button className="btn btn-join-aallie" onClick={onJoinClick}>
-          Join aallie
-        </button>
+        {/* Logo in the center */}
+        <div className="mx-auto d-flex justify-content-center">
+          <img
+            src={theme === 'dark' ? darkLogo : lightLogo}
+            width="146"
+            height="56"
+            className="d-inline-block align-top"
+            alt="aallie logo"
+          />
+        </div>
+
+        {/* Join button on the right */}
+        <div className="d-flex align-items-center ml-auto">
+          <button className="btn btn-join-aallie" onClick={onJoinClick}>
+            Join aallie
+          </button>
+        </div>
       </nav>
     </>
   );
