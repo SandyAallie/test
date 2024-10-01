@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import darkH1 from '../assets/images/Group 43.png';
 import lightH1 from '../assets/images/Group 48.png';
 
@@ -25,30 +25,39 @@ import { useOutletContext } from 'react-router-dom';
 const Main = () => {
     const { theme } = useContext(ThemeContext);
     const { lastSectionRef } = useOutletContext();
-    const form = useRef();  
 
-    const sendEmail = (e) => {
+    const [email, setEmail] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
 
-        emailjs.sendForm(
-            'service_6ulemwu',  
-            'template_3r03w0y',  
-            form.current,
-            'N_TQJHNO46Uf5fuGi'
-        )
-        .then(
-            () => {
-                message.success('Email sent successfully!'); 
-            },
-            (error) => {
-                message.error('Failed to send email. Please try again.');
+        try {
+            const response = await fetch('https://aallie-backend.onrender.com/api/waitlist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email }),
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                message.success(result.message);
+            } else {
+                message.error(result.error || 'Failed to submit email. Please try again later.');
             }
-        );
+        } catch (error) {
+            message.error('An error occurred. Please try again later.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <>
-            {/* Hero Section */}
+
             <section>
                 <div className="container w-100 vh-100 d-flex flex-column justify-content-center align-items-center">
                     <div className="text-center">
@@ -67,26 +76,27 @@ const Main = () => {
                     </div>
 
                     {/* Email Form */}
-                    <form ref={form} onSubmit={sendEmail} className="input-container d-flex mt-3">
+                    <form className="input-container d-flex mt-3" onSubmit={handleSubmit}>
                         <div className="row">
                             <div className="col-8">
-                                <input 
-                                    type="email" 
-                                    className="form-control p-3" 
-                                    placeholder="Your email address" 
-                                    name="user_email" 
-                                    required 
+                                <input
+                                    type="email"
+                                    className="form-control p-3"
+                                    placeholder="Your email address"
+                                    name="user_email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
                                 />
                             </div>
                             <div className="col-4">
-                                <button type="submit" className='btn btn-submit-email w-100'>
-                                    Request Access
+                                <button type="submit" className='btn btn-submit-email w-100' disabled={loading}>
+                                    {loading ? 'Submitting...' : 'Request Access'}
                                 </button>
                             </div>
                         </div>
                     </form>
 
-                    {/* Social Icons */}
                     <div className="social-icons mt-4 d-flex justify-content-center">
                         <a href="https://waitlist-aallie.onrender.com/" target="_blank" rel="noopener noreferrer">
                             <i className="fas fa-globe"></i>
@@ -107,7 +117,6 @@ const Main = () => {
                 </div>
             </section>
 
-            {/* Video Section */}
             <section>
                 <div className="container mb-5 vh-100 d-flex flex-column justify-content-center align-items-center">
                     <div style={{
@@ -118,22 +127,21 @@ const Main = () => {
                         aspectRatio: '1.4588832487309644',
                         padding: '40px 0'
                     }}>
-                        <iframe 
-                            src="https://app.supademo.com/embed/cm0zgruj900lbcod9gmiwg897?embed_v=2" 
-                            loading="lazy" 
-                            title="Preformulate" 
-                            allow="clipboard-write" 
-                            frameBorder="0" 
-                            webkitAllowFullScreen 
-                            mozAllowFullScreen 
-                            allowFullScreen 
+                        <iframe
+                            src="https://app.supademo.com/embed/cm0zgruj900lbcod9gmiwg897?embed_v=2"
+                            loading="lazy"
+                            title="Preformulate"
+                            allow="clipboard-write"
+                            frameBorder="0"
+                            webkitAllowFullScreen
+                            mozAllowFullScreen
+                            allowFullScreen
                             style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
                         ></iframe>
                     </div>
                 </div>
             </section>
 
-            {/* AI Section */}
             <section className='vh-50 mb-5'>
                 <div>
                     <img src={theme === 'dark' ? lineDarkLeft : lineLightLeft} className='img-line-1' alt="line" />
@@ -142,8 +150,8 @@ const Main = () => {
                             <div className='mb-3'>
                                 <img
                                     src={theme === 'dark' ? darkAI : lightAI}
-                                    width="100%"  
-                                    height="auto"  
+                                    width="100%"
+                                    height="auto"
                                     className="d-inline-block align-top"
                                     alt="AI Section"
                                 />
@@ -156,7 +164,6 @@ const Main = () => {
                 </div>
             </section>
 
-            {/* Scenario Section */}
             <section className='vh-50 mb-5'>
                 <div>
                     <img src={theme === 'dark' ? lineDarkRight : lineLightRight} className='img-line-2' alt="line" />
@@ -165,8 +172,8 @@ const Main = () => {
                             <div className='mb-3'>
                                 <img
                                     src={theme === 'dark' ? darkSecnario : lightSecnario}
-                                    width="100%" 
-                                    height="auto" 
+                                    width="100%"
+                                    height="auto"
                                     className="d-inline-block align-top"
                                     alt="Scenario Section"
                                 />
@@ -183,7 +190,6 @@ const Main = () => {
                 </div>
             </section>
 
-            {/* Simplicity Section */}
             <section className='vh-50 mb-5'>
                 <div>
                     <img src={theme === 'dark' ? lineDarkLeft : lineLightLeft} className='img-line-1' alt="line" />
@@ -192,8 +198,8 @@ const Main = () => {
                             <div className='mb-3'>
                                 <img
                                     src={theme === 'dark' ? darkSimplicity : lightSimplicity}
-                                    width="100%" 
-                                    height="auto" 
+                                    width="100%"
+                                    height="auto"
                                     className="d-inline-block align-top"
                                     alt="Simplicity Section"
                                 />
@@ -206,41 +212,40 @@ const Main = () => {
                 </div>
             </section>
 
-        {/* Footer Section */}
-{/* Footer Section */}
-<section ref={lastSectionRef} className='vh-50 mb-5'>
-    <div>
-        <div className="container mt-5 d-flex flex-column justify-content-center align-items-center">
-            <div className="text-center">
-                <span className="FooterTagLine">
-                    Join the waitlist now and get a step closer to your goals and make your financial decisions easily!
-                </span>
+            <section ref={lastSectionRef} className='vh-50 mb-5'>
+                <div>
+                    <div className="container mt-5 d-flex flex-column justify-content-center align-items-center">
+                        <div className="text-center">
+                            <span className="FooterTagLine">
+                                Join the waitlist now and get a step closer to your goals and make your financial decisions easily!
+                            </span>
 
-                <form ref={form} onSubmit={sendEmail} className="input-container d-flex mt-3 w-100 justify-content-center">
-                    <div className="row w-100">
-                        <div className="col-8">
-                            <input 
-                                type="email" 
-                                className="form-control p-3" 
-                                placeholder="Your email address" 
-                                name="user_email" 
-                                required 
-                            />
-                        </div>
-                        <div className="col-4 d-flex justify-content-center align-items-center">
-                            <button 
-                                type="submit" 
-                                className='btn btn-submit-email' 
-                                style={{ padding: '0.5rem 1rem', fontSize: '0.875rem', height: '50px' }}>
-                                Request Access
-                            </button>
+                            <form onSubmit={handleSubmit} className="input-container d-flex mt-3 w-100 justify-content-center">
+                                <div className="row w-100">
+                                    <div className="col-8">
+                                        <input
+                                            type="email"
+                                            className="form-control p-3"
+                                            placeholder="Your email address"
+                                            name="user_email"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="col-4 d-flex justify-content-center align-items-center">
+                                        <button
+                                            type="submit" disabled={loading}
+                                            className='btn btn-submit-email'
+                                            style={{ padding: '0.5rem 1rem', fontSize: '0.875rem', height: '50px' }}>
+                                            {loading ? 'Submitting...' : 'Request Access'}                            </button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
+                </div>
+            </section>
 
 
 
