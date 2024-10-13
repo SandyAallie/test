@@ -128,7 +128,7 @@ const Main = () => {
                         padding: '40px 0'
                     }}>
                         <iframe
-                            src="https://app.supademo.com/embed/cm0zgruj900lbcod9gmiwg897?embed_v=2"
+                           src="https://app.supademo.com/embed/cm0zgruj900lbcod9gmiwg897?embed_v=2"
                             loading="lazy"
                             title="Preformulate"
                             allow="clipboard-write"
