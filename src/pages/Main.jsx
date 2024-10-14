@@ -34,7 +34,7 @@ const Main = () => {
         setLoading(true);
 
         try {
-            const response = await fetch('https://aallie-backend.onrender.com/api/waitlist', {
+            const response = await fetch('https://aallie-backend-main.onrender.com/api/waitlist', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
