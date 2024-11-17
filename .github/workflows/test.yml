@@ -90,9 +90,6 @@ jobs:
                    export IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' waitinglist-app)
                    echo $IP
       
-                   echo Testing Image URL using wget
-                #   wget -q -O - 127.0.0.1:3000/live | grep live
-      
             - name: Build and push
               uses: docker/build-push-action@v5
               with:
@@ -100,5 +97,26 @@ jobs:
                 push: true
                 tags: ${{ vars.DOCKERHUB_USERNAME }}/waitinglist:${{ github.sha }}
 
+  deploy:
+    permissions:
+      contents: none
+    runs-on: windows-latest
+    needs: docker
+    environment:
+      name: 'Development'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
- 
+    steps:
+    - name: Download artifact from build job
+      uses: actions/download-artifact@v3
+      with:
+        name: node-app
+
+    - name: 'Deploy to Azure WebApp'
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
