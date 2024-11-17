@@ -1,7 +1,7 @@
 name: waitinglist workflow
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "feature-A" ]
   workflow_dispatch:
 
 env:
