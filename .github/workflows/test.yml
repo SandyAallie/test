@@ -1,0 +1,122 @@
+name: waitinglist workflow
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  AZURE_WEBAPP_NAME: aallie-v1-frontend    # set this to your application's name
+  AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
+  NODE_VERSION: '20.x'                # set this to the node version to use
+
+permissions:
+  contents: read
+
+jobs:
+  unit-testing:
+        name: unit Testing
+        strategy:
+            matrix:
+                nodejs_version: [20]
+                operating_system: [ubuntu-latest,windows-latest]
+
+        runs-on: ${{ matrix.operating_system }}
+        steps:
+            - name: checkout repository
+              uses: actions/checkout@v4
+
+            - name: setup NodeJs Version - ${{ matrix.nodejs_version }}
+              uses: actions/setup-node@v3
+              with:
+                node-version: ${{ matrix.nodejs_version }}
+            
+            - name: install depend.
+              run: npm install
+              
+  Code-coverage:  #installing npm,node js 
+      name: code coverage 
+      runs-on: windows-latest
+      steps:
+          - name: checkout repo
+            uses: actions/checkout@v4
+
+          - name: setup nodejs version 20
+            uses: actions/setup-node@v3
+            with:
+              node-version: 20
+          
+          - name: install depend.
+            run: npm install
+
+          - name: check code coverage 
+            continue-on-error: true
+            run: npm run coverage 
+
+          - name: Archive test Result
+            uses: actions/upload-artifact@v3
+            with:
+              name: code-coverage-result
+              path: coverage
+              retention-days: 5
+  docker:  # to check that the build works fine before pushing on azure
+        name: containerization
+        needs: [Code-coverage,unit-testing]
+        runs-on: ubuntu-latest
+        
+        steps:
+            - name: checkout
+              uses: actions/checkout@v4
+
+            - name: docker hub login
+              uses: docker/login-action@v3
+              with:
+                username: ${{ vars.DOCKERHUB_USERNAME }}
+                password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+            - name: Build and push
+              uses: docker/build-push-action@v5
+              with:
+                  context: .
+                  push: false
+                  tags: ${{ vars.DOCKERHUB_USERNAME }}/waitinglist:${{ github.sha }}
+  
+  
+            - name: Docker image Test
+              run: |
+                   docker images
+                   docker run --name waitinglist-app -d \
+                         -p 3000:3000 \
+                         ${{ vars.DOCKERHUB_USERNAME }}/waitinglist:${{ github.sha }}
+                   export IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' waitinglist-app)
+                   echo $IP
+      
+            - name: Build and push
+              uses: docker/build-push-action@v5
+              with:
+                context: .
+                push: true
+                tags: ${{ vars.DOCKERHUB_USERNAME }}/waitinglist:${{ github.sha }}
+
+  deploy:
+    permissions:
+      contents: none
+    runs-on: windows-latest
+    needs: docker
+    environment:
+      name: 'Development'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+    - name: Download artifact from build job
+      uses: actions/download-artifact@v3
+      with:
+        name: node-app
+
+    - name: 'Deploy to Azure WebApp'
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
