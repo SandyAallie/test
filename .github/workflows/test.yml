@@ -18,7 +18,7 @@ jobs:
         strategy:
             matrix:
                 nodejs_version: [20]
-               # operating_system: [ubuntu-latest,windows-latest]
+                #operating_system: [ubuntu-latest,windows-latest]
 
         runs-on: windows-latest
         steps:
@@ -58,13 +58,12 @@ jobs:
               name: code-coverage-result
               path: coverage
               retention-days: 5
-
-
+  
   deploy:
     permissions:
       contents: none
     runs-on: windows-latest
-    needs: Code-coverage
+    needs: unit-testing
     environment:
       name: 'Development'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
