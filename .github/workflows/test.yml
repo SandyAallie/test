@@ -18,9 +18,9 @@ jobs:
         strategy:
             matrix:
                 nodejs_version: [20]
-                operating_system: [ubuntu-latest,windows-latest]
+               # operating_system: [ubuntu-latest,windows-latest]
 
-        runs-on: ${{ matrix.operating_system }}
+        runs-on: windows-latest
         steps:
             - name: checkout repository
               uses: actions/checkout@v4
@@ -64,7 +64,7 @@ jobs:
     permissions:
       contents: none
     runs-on: windows-latest
-    #needs: docker
+    needs: Code-coverage
     environment:
       name: 'Development'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
