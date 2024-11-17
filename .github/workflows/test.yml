@@ -64,7 +64,7 @@ jobs:
     permissions:
       contents: none
     runs-on: windows-latest
-    needs: docker
+    #needs: docker
     environment:
       name: 'Development'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
