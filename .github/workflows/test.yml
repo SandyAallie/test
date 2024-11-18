@@ -72,12 +72,18 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: npm install
+           
       - name: Build React app
         run: npm run build
+
       - name: Deploy to Azure WebApp
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
