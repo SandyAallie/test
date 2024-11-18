@@ -69,6 +69,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+        repository: 'Proformulate/aallie-waitlist' 
+    ref: feature-A
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
