@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: aallie-v1-frontend    # set this to your application's name
+  AZURE_WEBAPP_NAME: waitlist-aallie    # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '20.x'                # set this to the node version to use
 
@@ -33,7 +33,7 @@ jobs:
             - name: install depend.
               run: npm install
               
-  Code-coverage:  #installing npm,node js 
+  Code-coverage:  #installing dependancies
       name: code coverage 
       runs-on: windows-latest
       steps:
