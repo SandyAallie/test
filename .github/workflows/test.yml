@@ -66,12 +66,9 @@ jobs:
     environment:
       name: 'Development'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-      
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-        
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
