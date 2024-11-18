@@ -66,6 +66,7 @@ jobs:
     environment:
       name: 'Development'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      url: https://waitlist.aallie.com/
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
