@@ -11,6 +11,7 @@ env:
 
 permissions:
   contents: read
+  packages: write
 
 jobs:
   unit-testing:
@@ -60,7 +61,9 @@ jobs:
               retention-days: 5
   deploy:
     permissions:
-      contents: none
+      contents: read
+      packages: write 
+        
     runs-on: windows-latest
     needs: unit-testing
     environment:
