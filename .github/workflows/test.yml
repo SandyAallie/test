@@ -65,7 +65,7 @@ jobs:
     needs: unit-testing
     environment:
       name: 'Development'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      #url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
       url: https://waitlist.aallie.com/
     steps:
       - name: Checkout repository
