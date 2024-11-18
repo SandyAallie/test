@@ -19,8 +19,7 @@ jobs:
         strategy:
             matrix:
                 nodejs_version: [20]
-                #operating_system: [ubuntu-latest,windows-latest]
-
+    
         runs-on: windows-latest
         steps:
             - name: checkout repository
@@ -80,7 +79,7 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-           
+
       - name: Build React app
         run: npm run build
 
