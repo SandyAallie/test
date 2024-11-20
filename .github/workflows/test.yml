@@ -15,7 +15,20 @@ permissions:
   packages: write
 
 jobs:
- 
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js version
+        uses: actions/setup-node@v3
+        with:
+          node-version:  ${{ env.NODE_VERSION }}
+      - name: Install dependencies, build react app
+        run: |
+          npm ci
+          npm run build
   deploy:
     permissions:
       contents: read
@@ -34,7 +47,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Install dependencies, build react app, run tests
+      - name: Install dependencies, build react app
         run: |
           npm ci
           npm run build
