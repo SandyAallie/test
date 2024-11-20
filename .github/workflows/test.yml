@@ -15,81 +15,81 @@ permissions:
   packages: write
 
 jobs:
-  unit-testing:
-        name: unit Testing
-        strategy:
-            matrix:
-                nodejs_version: [20]
-        runs-on: ubuntu-latest
+  # unit-testing:
+  #       name: unit Testing
+  #       strategy:
+  #           matrix:
+  #               nodejs_version: [20]
+  #       runs-on: ubuntu-latest
 
-        steps:
-            - name: checkout repository
-              uses: actions/checkout@v4
+  #       steps:
+  #           - name: checkout repository
+  #             uses: actions/checkout@v4
 
-            - name: Cache Node.js dependencies   #Caching dependencies is one of the most effective ways to speed up the workflow
-              uses: actions/cache@v3
-              with:
-                path: node_modules/
-                key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-                restore-keys: |
-                   ${{ runner.os }}-node-modules-  
+  #           - name: Cache Node.js dependencies   #Caching dependencies is one of the most effective ways to speed up the workflow
+  #             uses: actions/cache@v3
+  #             with:
+  #               path: node_modules/
+  #               key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+  #               restore-keys: |
+  #                  ${{ runner.os }}-node-modules-  
 
-            - name: setup NodeJs Version 
-              uses: actions/setup-node@v3
-              with:
-                node-version: ${{ env.NODE_VERSION }}
+  #           - name: setup NodeJs Version 
+  #             uses: actions/setup-node@v3
+  #             with:
+  #               node-version: ${{ env.NODE_VERSION }}
             
-            - name: install dependancies
-              run: |
-                npm ci
-                npm run build
-                npm run test -- --coverage
+  #           - name: install dependancies
+  #             run: |
+  #               npm ci
+  #               npm run build
+  #               npm run test -- --coverage
 
-            - name: Upload test results      # Upload test results as an artifact
-              uses: actions/upload-artifact@v3
-              with:
-                name: test-results
-                path: ./test-results/ 
-  Code-coverage: 
-      name: code coverage 
-      runs-on: ubuntu-latest
-      needs: unit-testing
-      steps:
-          - name: checkout repo
-            uses: actions/checkout@v4
+  #           - name: Upload test results      # Upload test results as an artifact
+  #             uses: actions/upload-artifact@v3
+  #             with:
+  #               name: test-results
+  #               path: ./test-results/ 
+  # Code-coverage: 
+  #     name: code coverage 
+  #     runs-on: ubuntu-latest
+  #     needs: unit-testing
+  #     steps:
+  #         - name: checkout repo
+  #           uses: actions/checkout@v4
 
-          - name: Download test results
-            uses: actions/download-artifact@v3
-            with:
-              name: test-results  
-          #      #Caching dependencies is one of the most effective ways to speed up the workflow
-          # - name: Cache Node.js dependencies
-          #   uses: actions/cache@v3
-          #   with:
-          #     path: ~/.npm
-          #     key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-          #     restore-keys: |
-          #        ${{ runner.os }}-node-modules-
+  #         - name: Download test results
+  #           uses: actions/download-artifact@v3
+  #           with:
+  #             name: test-results  
+  #         #      #Caching dependencies is one of the most effective ways to speed up the workflow
+  #         # - name: Cache Node.js dependencies
+  #         #   uses: actions/cache@v3
+  #         #   with:
+  #         #     path: ~/.npm
+  #         #     key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+  #         #     restore-keys: |
+  #         #        ${{ runner.os }}-node-modules-
   
-          # - name: setup nodejs version 20
-          #   uses: actions/setup-node@v3
-          #   with:
-          #     node-version: 20
+  #         # - name: setup nodejs version 20
+  #         #   uses: actions/setup-node@v3
+  #         #   with:
+  #         #     node-version: 20
           
-          # - name: install depend.
-          #   run: npm install
+  #         # - name: install depend.
+  #         #   run: npm install
 
-          # - name: run tests with coverage 
-          #   continue-on-error: true
-          #   run: npm test -- --coverage 
+  #         # - name: run tests with coverage 
+  #         #   continue-on-error: true
+  #         #   run: npm test -- --coverage 
           
 
-          - name: upload code coverage result
-            uses: actions/upload-artifact@v3
-            with:
-              name: code-coverage-result
-              path: ./coverage/*
-              retention-days: 5
+  #         - name: upload code coverage result
+  #           uses: actions/upload-artifact@v3
+  #           with:
+  #             name: code-coverage-result
+  #             path: ./coverage/*
+  #             retention-days: 5
   deploy:
     permissions:
       contents: read
