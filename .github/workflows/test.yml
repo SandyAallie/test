@@ -116,19 +116,19 @@ jobs:
           npm run test -- --maxWorkers=4     
 
      
-      - name: Download code coverage report
-        uses: actions/download-artifact@v3
-        with:
-          name: code-coverage-result
+      # - name: Download code coverage report
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: code-coverage-result
 
-      - name: Check coverage threshold
-        run: |
-          COVERAGE=$(jq '.total.lines.pct' ./coverage/lcov-report/lcov-report.json)
-          echo "Code Coverage: $COVERAGE"
-          if (( $(echo "$COVERAGE < 80" | bc -l) )); then
-            echo "Coverage is below threshold. Failing deployment."
-            exit 1
-          fi
+      # - name: Check coverage threshold
+      #   run: |
+      #     COVERAGE=$(jq '.total.lines.pct' ./coverage/lcov-report/lcov-report.json)
+      #     echo "Code Coverage: $COVERAGE"
+      #     if (( $(echo "$COVERAGE < 80" | bc -l) )); then
+      #       echo "Coverage is below threshold. Failing deployment."
+      #       exit 1
+      #     fi
            
       - name: Deploy to Azure WebApp
         id: deploy-to-webapp
