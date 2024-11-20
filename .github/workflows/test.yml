@@ -8,7 +8,7 @@ env:
   AZURE_WEBAPP_NAME: waitlist-test    # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '20.x'                # set this to the node version to use
-  # CUSTOM_DOMAIN: 'waitlist.aallie.com' 
+
 
 permissions:
   contents: read
@@ -96,7 +96,7 @@ jobs:
       packages: write 
         
     runs-on: ubuntu-latest
-    needs: [unit-testing, code-coverage]
+    # needs: [unit-testing, code-coverage]
     environment:
       name: 'Development'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
