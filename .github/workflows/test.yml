@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: waitlist-aallie    # set this to your application's name
+  AZURE_WEBAPP_NAME: waitlist-test    # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '20.x'                # set this to the node version to use
   # CUSTOM_DOMAIN: 'waitlist.aallie.com' 
@@ -20,52 +20,83 @@ jobs:
         strategy:
             matrix:
                 nodejs_version: [20]
-    
-        runs-on: windows-latest
+        runs-on: ubuntu-latest
+
         steps:
             - name: checkout repository
               uses: actions/checkout@v4
 
-            - name: setup NodeJs Version - ${{ matrix.nodejs_version }}
+            - name: Cache Node.js dependencies   #Caching dependencies is one of the most effective ways to speed up the workflow
+              uses: actions/cache@v3
+              with:
+                path: node_modules/
+                key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+                restore-keys: |
+                   ${{ runner.os }}-node-modules-  
+
+            - name: setup NodeJs Version 
               uses: actions/setup-node@v3
               with:
-                node-version: ${{ matrix.nodejs_version }}
+                node-version: ${{ env.NODE_VERSION }}
             
-            - name: install depend.
-              run: npm install
-              
-  Code-coverage:  #installing dependancies
+            - name: install dependancies
+              run: |
+                npm ci
+                npm run build
+                npm run test -- --coverage
+
+            - name: Upload test results      # Upload test results as an artifact
+              uses: actions/upload-artifact@v3
+              with:
+                name: test-results
+                path: ./test-results/ 
+  Code-coverage: 
       name: code coverage 
-      runs-on: windows-latest
+      runs-on: ubuntu-latest
+      needs: unit-testing
       steps:
           - name: checkout repo
             uses: actions/checkout@v4
 
-          - name: setup nodejs version 20
-            uses: actions/setup-node@v3
+          - name: Download test results
+            uses: actions/download-artifact@v3
             with:
-              node-version: 20
+              name: test-results  
+          #      #Caching dependencies is one of the most effective ways to speed up the workflow
+          # - name: Cache Node.js dependencies
+          #   uses: actions/cache@v3
+          #   with:
+          #     path: ~/.npm
+          #     key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          #     restore-keys: |
+          #        ${{ runner.os }}-node-modules-
+  
+          # - name: setup nodejs version 20
+          #   uses: actions/setup-node@v3
+          #   with:
+          #     node-version: 20
           
-          - name: install depend.
-            run: npm install
+          # - name: install depend.
+          #   run: npm install
 
-          - name: check code coverage 
-            continue-on-error: true
-            run: npm run coverage 
+          # - name: run tests with coverage 
+          #   continue-on-error: true
+          #   run: npm test -- --coverage 
+          
 
-          - name: Archive test Result
+          - name: upload code coverage result
             uses: actions/upload-artifact@v3
             with:
               name: code-coverage-result
-              path: coverage
+              path: ./coverage/*
               retention-days: 5
   deploy:
     permissions:
       contents: read
       packages: write 
         
-    runs-on: windows-latest
-    needs: unit-testing
+    runs-on: ubuntu-latest
+    needs: [unit-testing, code-coverage]
     environment:
       name: 'Development'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
@@ -78,16 +109,32 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install dependencies, build react app, run tests
+        run: |
+          npm ci
+          npm run build
+          npm run test -- --maxWorkers=4     
 
-      - name: Build React app
-        run: npm run build
+     
+      - name: Download code coverage report
+        uses: actions/download-artifact@v3
+        with:
+          name: code-coverage-result
 
+      - name: Check coverage threshold
+        run: |
+          COVERAGE=$(jq '.total.lines.pct' ./coverage/lcov-report/lcov-report.json)
+          echo "Code Coverage: $COVERAGE"
+          if (( $(echo "$COVERAGE < 80" | bc -l) )); then
+            echo "Coverage is below threshold. Failing deployment."
+            exit 1
+          fi
+           
       - name: Deploy to Azure WebApp
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE2 }}
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        if: ${{ success() }}    
