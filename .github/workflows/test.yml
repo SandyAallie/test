@@ -36,7 +36,11 @@ jobs:
       - name: Install dependencies, build react app
         run: |
           npm ci
-          npm run build
+          # npm run build
+          npm install --save-dev @babel/plugin-proposal-private-property-in-object
+      - name: Build React app
+        run: | 
+          CI=false npm run build
 
       - name: Archive production artifacts
         uses: actions/upload-artifact@v3
@@ -44,9 +48,6 @@ jobs:
            name: production-artifact
            path: ./build
 
-      - name: Build React app 
-        run: |
-         CI=false npm run build
   deploy:
     permissions:
       contents: read
