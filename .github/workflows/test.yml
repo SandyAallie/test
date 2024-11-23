@@ -43,6 +43,10 @@ jobs:
         with:
            name: production-artifact
            path: ./build
+
+      - name: Build React app 
+        run: |
+         CI=false npm run build
   deploy:
     permissions:
       contents: read
