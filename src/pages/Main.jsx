@@ -1,5 +1,5 @@
-// import React, { useContext, useRef, useState } from 'react';  sandy removed useRef
-import React, { useContext, useState } from 'react';
+ import React, { useContext, useRef, useState } from 'react';  //sandy removed useRef
+// import React, { useContext, useState } from 'react';
 
 import darkH1 from '../assets/images/Group 43.png';
 import lightH1 from '../assets/images/Group 48.png';
@@ -18,7 +18,7 @@ import lineDarkLeft from '../assets/images/Group 56.png';
 
 import lineLightRight from '../assets/images/Group 58.png';
 import lineDarkRight from '../assets/images/Group 57.png';
-// import emailjs from 'emailjs-com';   commented by sandy 
+ import emailjs from 'emailjs-com';   //commented by sandy 
 
 import { ThemeContext } from '../contexts/ThemeContext.jsx';
 import { message } from 'antd';
